@@ -1,0 +1,25 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "Homework Bamazon",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moffa1953/bamazon.git"
+  },
+  "author": "Bill Moffa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/moffa1953/bamazon/issues"
+  },
+  "homepage": "https://github.com/moffa1953/bamazon#readme",
+  "dependencies": {
+    "clear-terminal": "0.0.2",
+    "colors": "^1.1.2",
+    "inquirer": "^5.0.1",
+    "mysql": "^2.15.0"
+  }
+}
