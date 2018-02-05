@@ -4,7 +4,6 @@ var mysql = require('mysql');
 var colors = require('colors');
 var clearTerminal = require("clear-terminal");
 
-
 // Define the MySQL connection parameters
 var connection = mysql.createConnection({
 	host: 'localhost',
@@ -87,7 +86,7 @@ mainMenu()
 			// console.log('___ENTER displayInventory___');
 
 			// Construct the db query string
-			queryStr = 'SELECT * FROM products';
+			queryStr = 'SELECT * FROM products as P,departments as D where p.department_id = D.dept_id ';
 
 			// Make the db query
 			connection.query(queryStr, function(err, data) {
@@ -102,7 +101,7 @@ mainMenu()
 				for (var i = 0; i < data.length; i++) {
 					console.log("\t"+data[i].item_id+
 						"\t"+data[i].product_name +
-						"\t\t"+data[i].department_id +
+						"\t\t"+data[i].dept_name +
 						"\t"+data[i].price+"\t"+data[i].stock_quantity+" ".yellow)
 				}
 			  	console.log("-------------------\n".yellow);
@@ -113,18 +112,18 @@ mainMenu()
 
 		function lowInventory() {
 
-			queryStr = 'SELECT * FROM products WHERE stock_quantity < 12';
+			queryStr = 'SELECT * FROM products,departments WHERE department_id = dept_id and stock_quantity < 12';
 
 			connection.query(queryStr, function(err, data) {
 				if (err) throw err;
 
-				console.log('\tLow Inventory Items (< 5)'.yellow);
+				console.log('\tLow Inventory Items (< 10)'.yellow);
 				console.log('\t-------------------------\n');
 
 				for (var i = 0; i < data.length; i++) {
 					console.log("\t"+data[i].item_id+
 						"\t"+data[i].product_name +
-						"\t\t"+data[i].department_id +
+						"\t\t"+data[i].dept_name +
 						"\t"+data[i].price+"\t"+data[i].stock_quantity)
 				}
 				console.log('\t-------------------------\n'.yellow);
@@ -140,7 +139,7 @@ mainMenu()
 					type: 'input',
 					name: 'item_id',
 					message: 'Enter Product ID',
-					validate: checkNumber(),
+					validate: checkNumber,
 					filter: Number
 				},
 				{
@@ -191,11 +190,12 @@ mainMenu()
 					name: 'product_name',
 					message: 'Product name:',
 				},
-				{
-					type: 'input',
-					name: 'department_id',
-					message: 'Department ID:',
-				},
+			    {
+			      type: 'list',
+			      name: 'department_id',
+			      message: 'Sales Departmentepartment?',
+			      choices: ['10000-Mens','20000-Ladies','30000-Kids']
+			    },
 				{
 					type: 'input',
 					name: 'price',
@@ -211,6 +211,8 @@ mainMenu()
 			]).then(function(answers) {
 
 				answers.product_sales = 0  // default value for product sales
+				dept = answers.department_id.split('-')
+				answers.department_id = dept[0]
 
 				var queryStr = 'INSERT INTO products SET ?';
 

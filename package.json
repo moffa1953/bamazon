@@ -19,6 +19,7 @@
   "dependencies": {
     "clear-terminal": "0.0.2",
     "colors": "^1.1.2",
+    "columnify": "^1.5.4",
     "inquirer": "^5.0.1",
     "mysql": "^2.15.0"
   }
