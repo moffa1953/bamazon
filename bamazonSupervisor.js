@@ -74,22 +74,24 @@ mainMenu()
 
 
 		function viewSales() {
-			// console.log('___ENTER displayInventory___');
 
-			// Construct the db query string
-			queryStr = "SELECT "+
-							"P.department_id," +
-							"D.dept_name," +
-							"D.ohc," +
-							"SUM(P.product_sales) AS TOT_SALES," +
-							"(SUM(P.product_sales)-D.ohc) AS NEW_BAL " +
-						"from "+
-							"products as P, "+
-							"departments as D "+
-						"where "+
-							"P.department_id = D.dept_id "+
-						"GROUP BY "+
-							"P.department_id"
+			queryStr = 'SELECT '+
+ 							'P.department_id, '+ 
+ 							'D.dept_name, '+ 
+ 							'D.ohc, '+ 
+ 							'SUM(P.product_sales) AS TOT_SALES, '+
+   							'(CASE '+ 
+    							'WHEN SUM(P.product_sales) <=  0 THEN 0 '+
+    							'ELSE (SUM(P.product_sales)-D.ohc) '+
+  							'END) AS Profit '+
+						'FROM '+ 
+							'products as P, '+ 
+							'departments as D '+ 
+						'WHERE '+ 
+							'P.department_id = D.dept_id '+
+    					'GROUP BY '+   
+			 				'P.department_id'
+
 			
 			connection.query(queryStr, function(err, data) {
 				if (err) throw err;
@@ -105,7 +107,7 @@ mainMenu()
 						"\t\t"+data[i].dept_name +
 						"\t\t"+formatNumber(data[i].ohc) +
 						"\t\t"+formatNumber(data[i].TOT_SALES) +
-						"\t\t"+formatNumber(data[i].NEW_BAL)+" ".yellow)
+						"\t\t"+formatNumber(data[i].Profit)+" ".yellow)
 				}
 			  	console.log("-------------------\n".yellow);
 
@@ -139,10 +141,10 @@ mainMenu()
 				// Add new product to the db
 				connection.query(queryStr, answers, function (error, results, fields) {
 					if (error) throw error;
-					console.log('\n===========================================================\n'.yellow);
-					console.log('\n\tA new department has been created for '.yellow+answers.depatment_name)
-					console.log('\n\tThe product id is: '.yellow+ answers.dept_id + ' ');
-					console.log('\n===========================================================\n\n'.yellow);
+					console.log('\n==========================================================='.yellow);
+					console.log('\tA new department has been created for '.yellow+answers.dept_name)
+					console.log('\tThe product id is: '.yellow+ answers.dept_id + ' ');
+					console.log('\t===========================================================\n\n'.yellow);
 
 					mainMenu();
 				});

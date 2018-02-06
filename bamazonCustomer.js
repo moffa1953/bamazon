@@ -95,16 +95,14 @@ connection.connect(function(err) {
 								', product_sales = '+
 								((answers.quantity*data[0].price)+data[0].product_sales) + 
 								' WHERE item_id = ' + answers.prod_id;
-
-								console.log('updateQueryStr = ' + updateQueryStr);
-
 								// Update the inventory
 								connection.query(updateQueryStr, function(err, data) {
+									
 									if (err) throw err;
 									clearTerminal()
 									console.log("\t========================================================".yellow)
 									console.log('\tYour order has been placed! '.yellow)
-									console.log("\tYour total is $".yellow +(answers.quantity*unitPrice));
+									console.log("\tYour total is $".yellow +(answers.quantity*unitPrice).toFixed(2));
 									console.log('\tThank you for shopping with us!'.yellow);
 									console.log("\t========================================================".yellow);
 
@@ -139,7 +137,7 @@ connection.connect(function(err) {
                       				console.log("An numeric entry must be made")
                       			} else {
                       				if(/[0-9]/.test(value)) {
-                      					console.log(/[0-9]/.test(value))
+   
                       					result = true
                       				}
                       			}
@@ -147,4 +145,4 @@ connection.connect(function(err) {
                       }
 
                       return result                    
-                }
+              }
